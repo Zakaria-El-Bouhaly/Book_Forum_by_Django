@@ -1,0 +1,25 @@
+{% extends 'timeline/base.html' %}
+
+{% block content %}
+<div class="post_container">
+    {% if user.profile.image %}
+    <img src="{{user.profile.image.url}}" style="width :250px ; height:250px;border-radius:50%;object-fit:cover;" alt="">
+    {% endif %}
+
+    <h3>{{user.username}}</h3>
+    <h3>{{user.email}}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{c_form}}
+        <button type="submit">Save</button></form>
+    </form>
+
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{i_form}}
+        <button type="submit">Save</button></form>
+    </form>
+</div>
+{% endblock content %}

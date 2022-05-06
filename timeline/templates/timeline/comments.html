@@ -1,0 +1,48 @@
+{% extends 'timeline/base.html' %}
+
+{% block content %}
+
+<div class="post_container">
+    <div class="line1">
+        <h3>{{post.poster}}</h3>
+        <h4>{{post.date_posted}}</h4>
+    </div>
+
+    <div class="line2">
+        <h3>{{post.title}}</h3>
+        <h3>{{post.author}}</h3>
+    </div>
+
+    <div class="line2">
+        <h4>{{post.rating}}/10</h4>
+        <p>{{post.review}}</p>
+    </div>
+
+    {% if post.image %}
+    <img src="{{ post.image.url}}" alt="">
+    {% endif %}
+
+    <p> <u><strong>{{post.rating}}</strong></u>{{post.review}}</p>
+    {% if post.image %}
+    <img src="{{ post.image.url}}">
+    {% endif %}
+</div>
+<div class="comment_section">
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">Save</button>
+    </form>
+
+    {% for comment in comments %}
+    <div class="comment_container">
+        <a href="{%url 'public_profile' comment.poster.pk%}"><b>{{comment.poster}} : </b></a>
+        <p>{{comment.comment}}</p>
+        <br>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

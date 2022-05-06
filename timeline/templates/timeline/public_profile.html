@@ -1,0 +1,16 @@
+{% extends 'timeline/base.html' %}
+
+{% block content %}
+<div class="post_container">
+
+    {% if user_comment.poster.profile.image  %}
+    <img src="{{user_comment.poster.profile.image.url}}"
+        style="width :250px ; height:250px;border-radius:50%;object-fit:cover;" alt="">
+    {% endif %}
+
+
+
+    <h3>{{user_comment.poster.username}}</h3>
+
+</div>
+{% endblock content %}
