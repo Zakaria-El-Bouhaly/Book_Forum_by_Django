@@ -22,10 +22,6 @@
     <img src="{{ post.image.url}}" alt="">
     {% endif %}
 
-    <p> <u><strong>{{post.rating}}</strong></u>{{post.review}}</p>
-    {% if post.image %}
-    <img src="{{ post.image.url}}">
-    {% endif %}
 </div>
 <div class="comment_section">
     <form method="POST">
@@ -36,7 +32,7 @@
 
     {% for comment in comments %}
     <div class="comment_container">
-        <a href="{%url 'public_profile' comment.poster.pk%}"><b>{{comment.poster}} : </b></a>
+        <a  href="{%url 'public_profile' comment.poster.pk%}"><b>{{comment.poster}} : </b></a>
         <p>{{comment.comment}}</p>
         <br>
     </div>

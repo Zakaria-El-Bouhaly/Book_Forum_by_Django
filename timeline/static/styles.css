@@ -39,7 +39,7 @@ a {
 }
 
 .home {
-    background-color: rgb(0, 167, 0);
+    background-color: rgb(255, 196, 0);
     color: rgb(255, 255, 255);
 }
 
@@ -57,9 +57,9 @@ form {
     justify-content: center;
     margin: auto;
     margin-top: 100px;
-    width: 40%;
+    width: 60%;
     padding: 5vh 2vw;
-    border: 2px solid rgb(0, 167, 0);
+    border: 2px solid rgb(255, 196, 0);
     color: aliceblue;
     text-align: center;
 }
@@ -67,13 +67,17 @@ form {
 form input {
     margin: auto;
     padding: 1vh 1vw;
-    width: 80%;
+    width: 100%;
     outline: none;
     border: 1px solid black;
 }
 
+form textarea {
+    width: 100%;
+}
+
 form a {
-    color: rgb(18, 214, 0);
+    color: rgb(255, 238, 0);
 }
 
 button {
@@ -86,7 +90,7 @@ button {
 }
 
 button:hover {
-    background-color: rgb(0, 167, 0);
+    background-color: rgb(255, 196, 0);
     color: aliceblue;
 }
 
@@ -95,8 +99,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     justify-items: center;
-    border: 2px solid rgb(0, 167, 0);
-    box-shadow: 0px 8px 40px rgb(53, 255, 131);
+    border: 2px solid rgb(255, 196, 0);
     margin: auto;
     margin-top: 80px;
     padding: 10px 5px;
@@ -124,7 +127,7 @@ button:hover {
 .post_container input {
     padding: 1vh 2vw;
     margin: 1vh auto;
-    width: 40%;
+    width: 80%;
     outline: none;
     border: 1px solid rgb(0, 0, 0);
 }
@@ -138,11 +141,42 @@ button:hover {
     width: 50%;
     display: flex;
     flex-direction: column;
-    border: 2px solid rgb(0, 167, 0);
+    border: 2px solid rgb(255, 196, 0);
     margin-top: 20px;
+}
+
+.comment_section form {
+    margin-bottom: 20px;
 }
 
 .comment_container * {
     float: left;
     display: inline;
+}
+
+.comment_container p {
+    color: white;
+}
+
+.comment_container a {
+    color: rgb(255, 230, 0);
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 1080px) {
+    .post_container {
+        width: 80%;
+    }
+    .post_container input {
+        width: 40%;
+    }
+    form {
+        width: 90%;
+    }
+    .comment_container {
+        width: 80%;
+    }
+    .comment_section {
+        width: 80%;
+    }
 }
