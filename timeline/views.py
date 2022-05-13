@@ -12,7 +12,7 @@ from django.views.decorators.http import require_GET, require_POST
 # Create your views here.
 
 def google_books(title_and_author):
-    queries = {'q': title_and_author, 'key': settings.GOOGLE_BOOKS_API_KEY}
+    queries = {'q': title_and_author, 'key': ""}
     r = requests.get(
         'https://www.googleapis.com/books/v1/volumes', params=queries)
 

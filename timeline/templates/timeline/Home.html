@@ -1,102 +1,62 @@
 {% extends 'timeline/base.html' %}
-
 {% block content %}
+    <div class="m-4 row justify-content-center">
+        <div class="col-8">
+            {% load crispy_forms_tags %}
+            {% if user.is_authenticated %}
+                <div class="m-4 card">
+                    <div class="card-body">
+                        <h2>Post about a book</h2>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="m-2 btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
 
-
-<div class="container">
-    {% if user.is_authenticated %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form}}
-        <button type="submit">Add</button>
-    </form>
-    {% endif %}
-    {% for post in posts %}
-
-    <div class="post_container">
-
-        <div class="line1">
-            <h3>{{post.poster}}</h3>
-            <h4>{{post.date_posted}}</h4>
-        </div>
-
-        <div class="line2">
-            <h3>{{post.title}}</h3>
-            <h3>{{post.author}}</h3>
-        </div>
-
-        <div class="line2">
-            <h4>{{post.rating}}/10</h4>
-            <p>{{post.review}}</p>
-        </div>
-
-        {% if post.image %}
-        <img src="{{ post.image.url}}" alt="">
-        {% endif %}
-
-
-        {% if post.poster == user %}
-        <button><a href="{% url 'edit_post' post.pk %} ">Edit</a></button>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-        <button><a href="{% url 'comments' post.pk %} ">Comment</a></button>
-        {% endif %}
-
-
-        {% comment %} {% if user.is_authenticated %}
-
-        <form action='{% url 'liking' post.pk %}' method='GET'>
-            {% csrf_token %}
-
-            <button class="{% if user in post.likes.all %}Liked{% endif %}" type="submit">{{post.likes.count}}
-                Likes</button>
-
-        </form>
-
-        <form action='{% url 'disliking' post.pk %}' method='GET'>
-            {% csrf_token %}
-            <p></p>
-
-            <button class="{% if user in post.dislikes.all %}Disliked{% endif %}" type="submit">{{post.dislikes.count}}
-                Dislikes</button>
-
-        </form>
-
-        {% endif %} {% endcomment %}
-
-        {% if user.is_authenticated %}
-
-        <input type="button" id="like_{{post.pk}}" name="{{post.pk}}" value="likes : {{post.total_likes}}">
-
-        <input type="button" id="dislike_{{post.pk}}" name="{{post.pk}}" value="dislikes : {{post.total_dislikes}}">
-
-
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-        {% if user in post.likes.all %}
-        <script type="text/javascript">
-            $('#like_{{post.pk}}').css("background-color", "rgb(255, 187, 0)");
-        </script>
-        {% endif %}
-
-
-
-        {% if user in post.dislikes.all %}
-        <script type="text/javascript">
-            $('#dislike_{{post.pk}}').css("background-color", "rgb(91, 0, 181)");
-            $('#dislike_{{post.pk}}').css("color", "rgb(255, 255, 255)");
-        </script>
-        {% endif %}
-
-
-
-
-
-        <script type="text/javascript">
-            $('#like_{{post.pk}}').click(function () {
-                $.ajax({
+                {% for post in posts %}
+                    <div class="m-2 card">
+                        {% if post.image %}<img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">{% endif %}
+                        <div class="card-body">
+                            <h4 class="card-title">{{ post.title }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ post.author }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ post.rating }}/10</h6>
+                            <p class="card-text">
+                                {{ post.review }}
+                            </p>
+                            <p class="card-text">
+                                <a href="" class="card-link">{{ post.poster }}</a>
+                                <small class="text-muted">{{ post.date_posted }}</small>
+                            </p>
+                            {% if user.is_authenticated %}
+                                <input type="button"
+                                       id="like_{{ post.pk }}"
+                                       class="m-2 btn btn-primary"
+                                       name="{{ post.pk }}"
+                                       value="likes : {{ post.total_likes }}">
+                                <input type="button"
+                                       id="dislike_{{ post.pk }}"
+                                       class="m-2 btn btn-primary"
+                                       name="{{ post.pk }}"
+                                       value="dislikes : {{ post.total_dislikes }}">
+                                <a href="{% url 'comments' post.pk %}" class="m-2 btn btn-primary">Comment</a>
+                            {% endif %}
+                            {% if post.poster == user %}
+                                <a href="{% url 'edit_post' post.pk %}" class=" m-2 btn btn-primary">Edit</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if user in post.likes.all %}
+                        <script type="text/javascript">$('#like_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-success");</script>
+                    {% endif %}
+                    {% if user in post.dislikes.all %}
+                        <script type="text/javascript">$('#dislike_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-danger");</script>
+                    {% endif %}
+                    <script type="text/javascript">
+                         $('#like_{{post.pk}}').click(function () {              
+                             $.ajax({
                     type: "POST",
                     url: "{% url 'like' %}",
                     data: {
@@ -105,27 +65,25 @@
                     },
                     dataType: "json",
                     success: function (response) {
+                      
 
 
                         $('#like_{{post.pk}}').val('likes : ' + response['total_likes']);
                         $('#dislike_{{post.pk}}').val('dislikes : ' + response['total_dislikes'])
 
                         if (response['is_liked']) {
-                            $('#like_{{post.pk}}').css("background-color", "rgb(255, 187, 0)");
-                            $('#dislike_{{post.pk}}').css("background-color", "rgb(255, 255, 255)");
-                            $('#dislike_{{post.pk}}').css("color", "black");
+                            $('#like_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-success")
+                            $('#dislike_{{post.pk}}').removeClass("btn btn-danger").addClass("btn btn-primary")
                         }
                         if (!response['is_liked']) {
-                            $('#like_{{post.pk}}').css("background-color", "rgb(255, 255, 255)");
+                            $('#like_{{post.pk}}').removeClass("btn btn-success").addClass("btn btn-primary")
                         }
                     },
 
                 });
             })
-        </script>
-
-
-        <script type="text/javascript">
+                    </script>
+                    <script type="text/javascript">
             $('#dislike_{{post.pk}}').click(function () {
                 $.ajax({
                     type: "POST",
@@ -141,36 +99,22 @@
                         $('#dislike_{{post.pk}}').val('dislikes : ' + response['total_dislikes'])
 
                         if (response['is_disliked']) {
-                            $('#dislike_{{post.pk}}').css("background-color", "rgb(91, 0, 181)");
-                            $('#dislike_{{post.pk}}').css("color", "rgb(255, 255, 255)");
-                            $('#like_{{post.pk}}').css("background-color", "rgb(255, 255, 255)");
+                            $('#dislike_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-danger")
+                            $('#like_{{post.pk}}').removeClass("btn btn-success").addClass("btn btn-primary")
 
                         }
                         if (!response['is_disliked']) {
-                            $('#dislike_{{post.pk}}').css("background-color", "rgb(255, 255, 255)");
-                            $('#dislike_{{post.pk}}').css("color", "black");
+                            $('#dislike_{{post.pk}}').removeClass("btn btn-danger").addClass("btn btn-primary")
+                         
                         }
 
                     },
 
                 });
             })
-        </script>
-
-
-        {% endif %}
-
-
-
-
-
-
-    </div>
-
+                    </script>
+                {% endfor %}
+            </div>
+        </div>   
 </div>
-<br>
-{% endfor %}
-
-
-
 {% endblock content %}

@@ -1,25 +1,34 @@
 {% extends 'timeline/base.html' %}
-
 {% block content %}
-<div class="post_container">
-    {% if user.profile.image %}
-    <img src="{{user.profile.image.url}}" style="width :250px ; height:250px;border-radius:50%;object-fit:cover;" alt="">
-    {% endif %}
+{% load crispy_forms_tags %}
+    <div class="m-4 row justify-content-center">
+        <div class="col-8">
+            <div class="m-auto text-center card">
+                <div class="m-auto card-body">
+                    {% if user.profile.image %}
+                        <img src="{{ user.profile.image.url }}"
+                             style="width :250px;
+                                    height:250px;
+                                    border-radius:50%;
+                                    object-fit:cover;"
+                             alt="">
+                    {% endif %}                
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ c_form|crispy }}
+                        <button type="submit" class="m-4 btn btn-success">Save</button>
+                    </form>
 
-    <h3>{{user.username}}</h3>
-    <h3>{{user.email}}</h3>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ i_form|crispy }}
+                        <button type="submit" class="m-4 btn btn-success">Save</button>
+                    </form>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{c_form}}
-        <button type="submit">Save</button></form>
-    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{i_form}}
-        <button type="submit">Save</button></form>
-    </form>
-</div>
 {% endblock content %}

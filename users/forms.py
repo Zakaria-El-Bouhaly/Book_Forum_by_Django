@@ -18,6 +18,7 @@ class CredUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+        
 
 
 class ImgUpdateForm(forms.ModelForm):
