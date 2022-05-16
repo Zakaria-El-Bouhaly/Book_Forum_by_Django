@@ -6,6 +6,7 @@ urlpatterns = [
     path('comments/<int:post_pk>', views.comments, name="comments"),
     path('user/<int:user_pk>', views.public_profile, name="public_profile"),
     path('post/<int:post_pk>', views.post_edit, name="edit_post"),
+     path('comment/<int:comment_pk>', views.comment_edit, name="edit_comment"),
     path('like', views.like_post, name='like'),
     path('dislike', views.dislike_post, name='dislike')
     # path('like/<int:post_pk>', views.likebtn,name="liking"),

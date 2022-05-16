@@ -1,0 +1,66 @@
+{% if user in post.likes.all %}
+    <script type="text/javascript">$('#like_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-success");</script>
+{% endif %}
+{% if user in post.dislikes.all %}
+    <script type="text/javascript">$('#dislike_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-danger");</script>
+{% endif %}
+
+<script type="text/javascript">
+ $('#like_{{post.pk}}').click(function () {              
+     $.ajax({
+type: "POST",
+url: "{% url 'like' %}",
+data: {
+'post_pk': $('#like_{{post.pk}}').attr('name'),
+'csrfmiddlewaretoken': '{{ csrf_token }}'
+},
+dataType: "json",
+success: function (response) {
+
+
+
+$('#like_{{post.pk}}').val('likes : ' + response['total_likes']);
+$('#dislike_{{post.pk}}').val('dislikes : ' + response['total_dislikes'])
+
+if (response['is_liked']) {
+    $('#like_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-success")
+    $('#dislike_{{post.pk}}').removeClass("btn btn-danger").addClass("btn btn-primary")
+}
+if (!response['is_liked']) {
+    $('#like_{{post.pk}}').removeClass("btn btn-success").addClass("btn btn-primary")
+}
+},
+
+});
+})
+</script>
+<script type="text/javascript">
+$('#dislike_{{post.pk}}').click(function () {
+$.ajax({
+type: "POST",
+url: "{% url 'dislike' %}",
+data: {
+'post_pk': $('#dislike_{{post.pk}}').attr('name'),
+'csrfmiddlewaretoken': '{{ csrf_token }}'
+},
+dataType: "json",
+success: function (response) {
+
+$('#like_{{post.pk}}').val('likes : ' + response['total_likes']);
+$('#dislike_{{post.pk}}').val('dislikes : ' + response['total_dislikes'])
+
+if (response['is_disliked']) {
+    $('#dislike_{{post.pk}}').removeClass("btn btn-primary").addClass("btn btn-danger")
+    $('#like_{{post.pk}}').removeClass("btn btn-success").addClass("btn btn-primary")
+
+}
+if (!response['is_disliked']) {
+    $('#dislike_{{post.pk}}').removeClass("btn btn-danger").addClass("btn btn-primary")
+ 
+}
+
+},
+
+});
+})
+</script>

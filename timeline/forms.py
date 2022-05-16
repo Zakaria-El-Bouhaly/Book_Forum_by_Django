@@ -26,3 +26,14 @@ class delete_post(forms.ModelForm):
      class Meta:
         model = post
         fields=[]
+
+
+class edit_comment(forms.ModelForm):
+    class Meta:
+        model = comment      
+        fields = ["comment"]
+
+class delete_comment(forms.ModelForm):
+     class Meta:
+        model = comment
+        fields=[]

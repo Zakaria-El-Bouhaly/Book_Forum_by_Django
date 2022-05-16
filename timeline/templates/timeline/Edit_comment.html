@@ -1,0 +1,25 @@
+{% extends 'timeline/base.html' %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% if user.is_authenticated %}
+        <div class="m-4 row justify-content-center">
+            <div class="col-md-auto">
+                <div class="m-2  card">
+                    <div class="m-auto p-0 card-body">
+                        <form method="POST"
+                              onsubmit="return confirm('Do you really want to delete this comment?');">
+                            {% csrf_token %}
+                            {{ delete_button|crispy }}
+                            <button type="submit" class="m-4 btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ edit_form |crispy }}
+                    <button type="submit"  class="m-4 btn btn-danger">Save</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

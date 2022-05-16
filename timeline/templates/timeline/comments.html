@@ -12,7 +12,7 @@
                         {{ post.review }}
                     </p>
                     <p class="card-text">
-                        <a href="" class="card-link">{{ post.poster }}</a>
+                        <a href="{% url 'public_profile' post.poster.pk %}" class="card-link">{{ post.poster }}</a>
                         <small class="text-muted">{{ post.date_posted }}</small>
                     </p>
                 </div>
@@ -29,11 +29,14 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="card">
+            
                 {% for comment in comments %}
                     <div class="m-2 card">
                         <div class="card-header">
                             <a href="{% url 'public_profile' comment.poster.pk %}"><b>{{ comment.poster }} : </b></a>
+                            {% if comment.poster == user %}
+                                <a href="{% url 'edit_comment' comment.pk %}" class=" m-2 btn btn-primary">Edit</a>
+                            {% endif %}
                         </div>
                         <div class=" card-body">
                             <blockquote class="blockquote mb-0">
@@ -45,5 +48,5 @@
                     </div>
                 {% endfor %}
             </div>
-        </div>
+        
     {% endblock %}

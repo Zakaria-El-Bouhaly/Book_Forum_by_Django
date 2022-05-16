@@ -1,6 +1,6 @@
 {% extends 'timeline/base.html' %}
 {% block content %}
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
     <div class="m-2 row justify-content-center">
         <div class="col-md-auto">
             <div class="m-auto text-center card">
@@ -12,23 +12,54 @@
                                     border-radius:50%;
                                     object-fit:cover;"
                              alt="">
-                    {% endif %}                
+                    {% endif %}
                     <form method="POST">
                         {% csrf_token %}
                         {{ c_form|crispy }}
                         <button type="submit" class="m-4 btn btn-success">Save</button>
                     </form>
-
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ i_form|crispy }}
                         <button type="submit" class="m-4 btn btn-success">Save</button>
                     </form>
-
                 </div>
             </div>
+            <h4  class="m-2 text-muted">My Posts</h4>
+            {% for post in user_posts %}
+            
+                <div class="m-auto card">
+                    {% if post.image %}<img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">{% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title">{{ post.title }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.author }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.rating }}/10</h6>
+                        <p class="card-text">
+                            {{ post.review }}
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">{{ post.date_posted }}</small>
+                        </p>
+                        {% if user.is_authenticated %}
+                            <input type="button"
+                                   id="like_{{ post.pk }}"
+                                   class="m-2 btn btn-primary"
+                                   name="{{ post.pk }}"
+                                   value="likes : {{ post.total_likes }}">
+                            <input type="button"
+                                   id="dislike_{{ post.pk }}"
+                                   class="m-2 btn btn-primary"
+                                   name="{{ post.pk }}"
+                                   value="dislikes : {{ post.total_dislikes }}">
+                            <a href="{% url 'comments' post.pk %}" class="m-2 btn btn-primary">Comment</a>
+                        {% endif %}
+                        {% if post.poster == user %}
+                            <a href="{% url 'edit_post' post.pk %}" class=" m-2 btn btn-primary">Edit</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% include 'timeline/liking_disliking.html' %}
+            {% endfor %}
         </div>
     </div>
-    
-
 {% endblock content %}

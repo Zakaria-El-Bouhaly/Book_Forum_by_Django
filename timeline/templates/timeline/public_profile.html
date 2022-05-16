@@ -4,17 +4,48 @@
         <div class="col-md-auto">
             <div class="m-auto text-center card">
                 <div class="m-auto card-body">
-                    {% if user_comment.poster.profile.image %}
-                        <img src="{{ user_comment.poster.profile.image.url }}"
+                    {% if user_profile.profile.image %}
+                        <img src="{{ user_profile.profile.image.url }}"
                              style="width :250px;
                                     height:250px;
                                     border-radius:50%;
                                     object-fit:cover;"
                              alt="">
                     {% endif %}
-                    <h3>{{ user_comment.poster.username }}</h3>
+                    <h3>{{ user_profile.username }}</h3>
                 </div>
             </div>
+            <h4  class="m-2 text-muted">Posts By {{ user_profile.username }}</h4>
+            {% for post in user_posts %}
+                <div class="m-auto card">
+                    {% if post.image %}<img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">{% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title">{{ post.title }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.author }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.rating }}/10</h6>
+                        <p class="card-text">
+                            {{ post.review }}
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">{{ post.date_posted }}</small>
+                        </p>
+                        {% if user.is_authenticated %}
+                            <input type="button"
+                                   id="like_{{ post.pk }}"
+                                   class="m-2 btn btn-primary"
+                                   name="{{ post.pk }}"
+                                   value="likes : {{ post.total_likes }}">
+                            <input type="button"
+                                   id="dislike_{{ post.pk }}"
+                                   class="m-2 btn btn-primary"
+                                   name="{{ post.pk }}"
+                                   value="dislikes : {{ post.total_dislikes }}">
+                            <a href="{% url 'comments' post.pk %}" class="m-2 btn btn-primary">Comment</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% include 'timeline/liking_disliking.html' %}
+            {% endfor %}
         </div>
     </div>
 {% endblock content %}
